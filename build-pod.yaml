@@ -4,28 +4,60 @@ metadata:
   labels:
     app: jenkins-agents
 spec:
-  serviceAccountName: jenkins-admin # This is the Serviceaccount of the Jenkins Master , defined in jenkins-service-acount.yaml 
+  serviceAccountName: jenkins
   containers:
   - name: jnlp
-    image: jenkins/inbound-agent:4.11.2-4
+    image: jenkins/inbound-agent:4.11-1
     resources:
       requests:
         cpu: 100m
         memory: 256Mi
-  - name: docker
-    image: docker:20.10-dind
-    securityContext:
-      privileged: true
     env:
-    - name: DOCKER_TLS_CERTDIR
-      value: ""
-    resources:
-      requests:
-        cpu: 100m
-        memory: 256Mi
+    - name: JENKINS_URL
+      value: "http://jenkins.devops-tools.svc.cluster.local:8080"  # Adjust this URL
+    - name: JENKINS_TUNNEL
+      value: "jenkins-agent.devops-tools.svc.cluster.local:50000"  # Adjust this URL
+  - name: docker
+    image: docker:20.10
+    command:
+    - cat
+    tty: true
     volumeMounts:
-    - name: dind-storage
-      mountPath: /var/lib/docker
+    - name: docker-sock
+      mountPath: /var/run/docker.sock
+  - name: maven
+    image: maven:3.8.6-openjdk-11
+    command:
+    - cat
+    tty: true
   volumes:
-  - name: dind-storage
-    emptyDir: {}
+  - name: docker-sock
+    hostPath:
+      path: /var/run/docker.sock
+      
+# spec:
+#   serviceAccountName: jenkins-admin # This is the Serviceaccount of the Jenkins Master , defined in jenkins-service-acount.yaml 
+#   containers:
+#   - name: jnlp
+#     image: jenkins/inbound-agent:4.11.2-4
+#     resources:
+#       requests:
+#         cpu: 100m
+#         memory: 256Mi
+#   - name: docker
+#     image: docker:20.10-dind
+#     securityContext:
+#       privileged: true
+#     env:
+#     - name: DOCKER_TLS_CERTDIR
+#       value: ""
+#     resources:
+#       requests:
+#         cpu: 100m
+#         memory: 256Mi
+#     volumeMounts:
+#     - name: dind-storage
+#       mountPath: /var/lib/docker
+#   volumes:
+#   - name: dind-storage
+#     emptyDir: {}
