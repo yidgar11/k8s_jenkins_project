@@ -9,13 +9,27 @@ pipeline {
 
 
     environment {
-        DOCKERHUB_USERNAME = credentials('dockerhub-username')  // Jenkins credential ID
-        DOCKERHUB_PASSWORD = credentials('dockerhub-password')  // Jenkins credential ID
+        DOCKERHUB_CREDENTIALS = credentials('dockerhub-credentials') 
         IMAGE_NAME = "yidgar11/rmqp-example" // Replace with your Docker Hub username and desired image name
         IMAGE_TAG = "${env.BUILD_NUMBER}"
     }
 
     stages {
+        
+        stage('Login to DockerHub') {
+            steps {
+                script {
+                    // Extract username and password from stored credentials
+                    def dockerCreds = DOCKERHUB_CREDENTIALS.split(":")
+                    def username = dockerCreds[0]
+                    def password = dockerCreds[1]
+                    
+                    // Login to DockerHub
+                    sh "echo $password | docker login -u $username --password-stdin"
+                }
+            }
+        }
+    
         stage('Checkout') {
             steps {
                 git 'https://github.com/yidgar11/rmqp-example.git'
