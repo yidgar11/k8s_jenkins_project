@@ -1,6 +1,6 @@
 pipeline {
     agent {
-        docker {
+        dockerContainer {
             image 'docker:latest'  // Or a specific Docker image with necessary tools
             label 'docker' // Ensure your Jenkins agent has the 'docker' label
             args '-v /var/run/docker.sock:/var/run/docker.sock' // Allow Docker-in-Docker
