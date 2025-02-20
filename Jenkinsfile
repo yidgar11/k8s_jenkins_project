@@ -1,31 +1,44 @@
 pipeline {
   agent any
+  
+  environment {
+    DOCKERHUB_USERNAME = credentials('dockerhub-username') // Jenkins credential ID
+    DOCKERHUB_PASSWORD = credentials('dockerhub-password') // Jenkins credential ID
+    IMAGE_NAME = "yidgar11/rmqp-example" // Replace with your Docker Hub username and desired image name
+    IMAGE_TAG = "${env.BUILD_NUMBER}"
+  }
+
   stages {
-    stage('Unit Test') {
+    stage('Checkout') {
       steps {
-        sh 'mvn clean test'
+        git 'https://github.com/yidgar11/rmqp-example.git'
       }
     }
-    stage('Deploy Standalone') {
+
+    stage('Build Docker Image') {
       steps {
-        sh 'mvn deploy -P standalone'
+        sh "docker build -t ${IMAGE_NAME}:${IMAGE_TAG} ."
       }
     }
-    stage('Deploy AnyPoint') {
-      environment {
-        ANYPOINT_CREDENTIALS = credentials('anypoint.credentials')
-      }
+
+    stage('Login to Docker Hub') {
       steps {
-        sh 'mvn deploy -P arm -Darm.target.name=local-4.0.0-ee -Danypoint.username=${ANYPOINT_CREDENTIALS_USR}  -Danypoint.password=${ANYPOINT_CREDENTIALS_PSW}'
+        sh "docker login -u ${DOCKERHUB_USERNAME} -p ${DOCKERHUB_PASSWORD}"
       }
     }
-    stage('Deploy CloudHub') {
-      environment {
-        ANYPOINT_CREDENTIALS = credentials('anypoint.credentials')
-      }
+
+    stage('Push Docker Image') {
       steps {
-        sh 'mvn deploy -P cloudhub -Dmule.version=4.0.0 -Danypoint.username=${ANYPOINT_CREDENTIALS_USR} -Danypoint.password=${ANYPOINT_CREDENTIALS_PSW}'
+        sh "docker push ${IMAGE_NAME}:${IMAGE_TAG}"
       }
     }
   }
-}
+
+  post {
+    success {
+      echo 'Pipeline completed successfully!'
+    }
+    failure {
+      echo 'Pipeline failed!'
+    }
+  }
