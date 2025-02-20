@@ -2,10 +2,9 @@ pipeline {
   agent any
   
   environment {
-    DOCKERHUB_USERNAME = credentials('dockerhub-username') // Jenkins credential ID
-    DOCKERHUB_PASSWORD = credentials('dockerhub-password') // Jenkins credential ID
-    IMAGE_NAME = "yidgar11/rmqp-example" // Replace with your Docker Hub username and desired image name
-    IMAGE_TAG = "${env.BUILD_NUMBER}"
+     DOCKERHUB_CREDENTIALS = credentials('dockerhub-credentials') 
+     IMAGE_NAME = "yidgar11/rmqp-example" // Replace with your Docker Hub username and desired image name
+     IMAGE_TAG = "${env.BUILD_NUMBER}"
   }
 
   stages {
