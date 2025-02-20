@@ -6,17 +6,17 @@ metadata:
 spec:
   serviceAccountName: jenkins-admin # This is the Serviceaccount of the Jenkins Master , defined in jenkins-service-acount.yaml 
   containers:
-  - name: jnlp
-    image: jenkins/inbound-agent:3283.v92c105e0f819-9
-    resources:
-      requests:
-        cpu: 100m
-        memory: 256Mi
-    env:
-    - name: JENKINS_URL
-      value: "http://jenkins-service.devops-tools.svc.cluster.local:8080"  # Adjust this URL
-    - name: JENKINS_TUNNEL
-      value: "jenkins-service.devops-tools.svc.cluster.local:8080"  # Adjust this URL
+  # - name: jnlp
+  #   image: jenkins/inbound-agent:3283.v92c105e0f819-9
+  #   resources:
+  #     requests:
+  #       cpu: 100m
+  #       memory: 256Mi
+  #   env:
+  #   - name: JENKINS_URL
+  #     value: "http://jenkins-service.devops-tools.svc.cluster.local:8080"  # Adjust this URL
+  #   - name: JENKINS_TUNNEL
+  #     value: "jenkins-service.devops-tools.svc.cluster.local:8080"  # Adjust this URL
   - name: docker
     image: docker:20.10-dind
     securityContext:
