@@ -7,7 +7,7 @@ spec:
   serviceAccountName: jenkins-admin # This is the Serviceaccount of the Jenkins Master , defined in jenkins-service-acount.yaml 
   containers:
   - name: jnlp
-    image: jenkins/inbound-agent:3107.v665000b_51092 
+    image: jenkins/inbound-agent:3283.v92c105e0f819-9
     resources:
       requests:
         cpu: 100m
