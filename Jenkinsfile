@@ -1,10 +1,11 @@
 pipeline {
     agent {
-        docker {
-            image 'docker:latest'
-            label 'docker'
-            args '-v /var/run/docker.sock:/var/run/docker.sock' // Allow Docker-in-Docker
-        }
+        label = docker
+        // docker {
+        //     image 'docker:latest'
+        //     label 'docker'
+        //     args '-v /var/run/docker.sock:/var/run/docker.sock' // Allow Docker-in-Docker
+        // }
     }
 
 
