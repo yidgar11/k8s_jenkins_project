@@ -14,9 +14,9 @@ spec:
         memory: 256Mi
     env:
     - name: JENKINS_URL
-      value: "http://jenkins-service.devops-tools.svc.cluster.local:62624"  # Adjust this URL
+      value: "http://jenkins-service.devops-tools.svc.cluster.local:8080"  # Adjust this URL
     - name: JENKINS_TUNNEL
-      value: "jenkins-agent.devops-tools.svc.cluster.local:62624"  # Adjust this URL
+      value: "jenkins-service.devops-tools.svc.cluster.local:62624"  # Adjust this URL
   - name: docker
     image: docker:20.10-dind
     securityContext:
