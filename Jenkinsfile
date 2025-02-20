@@ -1,8 +1,8 @@
 pipeline {
   //agent any
-  agent{
-    docker { image 'node:16-apline' }
-  }
+  agent {
+    docker { image 'node:16-alpine' }
+}
   // agent {
   //     kubernetes {
   //       label 'my-docker-agent'  // all your pods will be named with this prefix, followed by a unique id
