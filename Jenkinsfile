@@ -38,7 +38,9 @@ pipeline {
     stage('Login to Docker Hub') {
       steps {
         echo "Login to Docker Hub" 
-        sh "docker login -u ${DOCKERHUB_USERNAME} -p ${DOCKERHUB_PASSWORD}"
+        echo "DOCKERHUB_USERNAME =  ${DOCKERHUB_USERNAME} "
+        echo "DOCKERHUB_PASSWORD =  ${DOCKERHUB_PASSWORD} "
+        //sh "docker login -u ${DOCKERHUB_USERNAME} -p ${DOCKERHUB_PASSWORD}"
       }
     }
 
