@@ -1,7 +1,8 @@
 pipeline {
     agent {
-        dockerContainer {
-            image 'docker:latest'  // Or a specific Docker image with necessary tools
+        docker {
+            image 'docker:latest'
+            label 'docker'
             args '-v /var/run/docker.sock:/var/run/docker.sock' // Allow Docker-in-Docker
         }
     }
