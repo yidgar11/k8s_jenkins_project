@@ -1,64 +1,31 @@
 pipeline {
-    agent {
-        label 'docker'
-        image 'python:3.7'
-        }
+  agent any
+  stages {
+    stage('Unit Test') {
+      steps {
+        sh 'mvn clean test'
+      }
     }
-
-
-    environment {
-        DOCKERHUB_CREDENTIALS = credentials('dockerhub-credentials') 
-        IMAGE_NAME = "yidgar11/rmqp-example" // Replace with your Docker Hub username and desired image name
-        IMAGE_TAG = "${env.BUILD_NUMBER}"
+    stage('Deploy Standalone') {
+      steps {
+        sh 'mvn deploy -P standalone'
+      }
     }
-
-    stages {
-        
-        stage('Login to DockerHub') {
-            steps {
-                script {
-                    // Extract username and password from stored credentials
-                    def dockerCreds = DOCKERHUB_CREDENTIALS.split(":")
-                    def username = dockerCreds[0]
-                    def password = dockerCreds[1]
-                    
-                    // Login to DockerHub
-                    sh "echo $password | docker login -u $username --password-stdin"
-                }
-            }
-        }
-    
-        stage('Checkout') {
-            steps {
-                git 'https://github.com/yidgar11/rmqp-example.git'
-            }
-        }
-
-        stage('Build Docker Image') {
-            steps {
-                sh "docker build -t ${IMAGE_NAME}:${IMAGE_TAG} ."
-            }
-        }
-
-        stage('Login to Docker Hub') {
-            steps {
-                sh "docker login -u ${DOCKERHUB_USERNAME} -p ${DOCKERHUB_PASSWORD}"
-            }
-        }
-
-        stage('Push Docker Image') {
-            steps {
-                sh "docker push ${IMAGE_NAME}:${IMAGE_TAG}"
-            }
-        }
+    stage('Deploy AnyPoint') {
+      environment {
+        ANYPOINT_CREDENTIALS = credentials('anypoint.credentials')
+      }
+      steps {
+        sh 'mvn deploy -P arm -Darm.target.name=local-4.0.0-ee -Danypoint.username=${ANYPOINT_CREDENTIALS_USR}  -Danypoint.password=${ANYPOINT_CREDENTIALS_PSW}'
+      }
     }
-
-    post {
-        success {
-            echo 'Pipeline completed successfully!'
-        }
-        failure {
-            echo 'Pipeline failed!'
-        }
+    stage('Deploy CloudHub') {
+      environment {
+        ANYPOINT_CREDENTIALS = credentials('anypoint.credentials')
+      }
+      steps {
+        sh 'mvn deploy -P cloudhub -Dmule.version=4.0.0 -Danypoint.username=${ANYPOINT_CREDENTIALS_USR} -Danypoint.password=${ANYPOINT_CREDENTIALS_PSW}'
+      }
     }
+  }
 }
