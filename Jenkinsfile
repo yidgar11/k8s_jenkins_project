@@ -1,11 +1,9 @@
 pipeline {
     agent {
-        label = docker
-        // docker {
-        //     image 'docker:latest'
-        //     label 'docker'
-        //     args '-v /var/run/docker.sock:/var/run/docker.sock' // Allow Docker-in-Docker
-        // }
+    docker {
+        label 'docker'
+        image 'python:3.7'
+        }
     }
 
 
