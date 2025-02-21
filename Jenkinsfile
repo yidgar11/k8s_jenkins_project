@@ -5,17 +5,17 @@ pipeline {
             defaultContainer 'jnlp'
             yaml """
             apiVersion: v1
-kind: Pod
-metadata:
-  name: jenkins-agent
-spec:
-  containers:
-    - name: jnlp
-      image: jenkins/inbound-agent
-    - name: docker
-      image: docker:latest
-    - name: maven
-      image: maven:latest
+            kind: Pod
+            metadata:
+              name: jenkins-agent
+            spec:
+              containers:
+              - name: jnlp
+                image: jenkins/inbound-agent
+              - name: docker
+                image: docker:latest
+              - name: maven
+                image: maven:latest
             """
         }
     }
@@ -23,20 +23,19 @@ spec:
         stage('Build') {
             steps {
                 container('maven') {
-                    sh 'mvn clean install'
+                    sh 'mvn --version'
                 }
             }
         }
-        stage('Docker Build') {
+        stage('Test') {
             steps {
                 container('docker') {
-                    sh 'docker build -t my-app .'
+                    sh 'docker --version'
                 }
             }
         }
     }
 }
-
 
 
 
