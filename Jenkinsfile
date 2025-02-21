@@ -26,9 +26,10 @@ pipeline {
   }
 
   stages {
-    stage('Checkout') {
+    stage('Checkout github') {
       steps {
         git 'https://github.com/yidgar11/rmqp-example.git'
+        sh 'ls -l' 
       }
     }
 
