@@ -1,6 +1,6 @@
 pipeline {
   //agent any
-  agent docker-pod
+  agent { docker-pod }
   // agent {
   //       docker {
   //           image 'docker:24.0.6-dind' // Use a Docker-in-Docker image
