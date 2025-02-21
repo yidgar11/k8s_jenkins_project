@@ -5,29 +5,17 @@ pipeline {
             defaultContainer 'jnlp'
             yaml """
             apiVersion: v1
-            kind: Pod
-            metadata:
-              name: jenkins-agent
-            spec:
-              containers:
-              - name: jnlp
-                image: jenkins/inbound-agent
-                env:
-                - name: JENKINS_URL
-                  value: "http://jenkins-service.devops-tools.svc.cluster.local"
-              - name: docker
-                image: docker:dind # Use Docker-in-Docker image if needed for builds requiring Docker CLI.
-                securityContext:
-                  privileged: true # Required for Docker-in-Docker functionality.
-                volumeMounts:
-                - name: docker-socket
-                  mountPath: /var/run/docker.sock # Mount Docker socket from host.
-              // - name: maven
-              //   image: maven:lts-jdk11 # Use a stable Maven image with JDK compatibility.
-              volumes:
-              - name: docker-socket
-                hostPath:
-                  path: /var/run/docker.sock # Host path for Docker socket.
+kind: Pod
+metadata:
+  name: jenkins-agent
+spec:
+  containers:
+    - name: jnlp
+      image: jenkins/inbound-agent
+    - name: docker
+      image: docker:latest
+    - name: maven
+      image: maven:latest
             """
         }
     }
