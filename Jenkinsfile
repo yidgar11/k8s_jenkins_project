@@ -12,10 +12,22 @@ pipeline {
               containers:
               - name: jnlp
                 image: jenkins/inbound-agent
+                env:
+                - name: JENKINS_URL
+                  value: "http://jenkins-service.devops-tools.svc.cluster.local"
               - name: docker
-                image: docker:latest
+                image: docker:dind # Use Docker-in-Docker image if needed for builds requiring Docker CLI.
+                securityContext:
+                  privileged: true # Required for Docker-in-Docker functionality.
+                volumeMounts:
+                - name: docker-socket
+                  mountPath: /var/run/docker.sock # Mount Docker socket from host.
               - name: maven
-                image: maven:latest
+                image: maven:lts-jdk11 # Use a stable Maven image with JDK compatibility.
+              volumes:
+              - name: docker-socket
+                hostPath:
+                  path: /var/run/docker.sock # Host path for Docker socket.
             """
         }
     }
@@ -23,19 +35,20 @@ pipeline {
         stage('Build') {
             steps {
                 container('maven') {
-                    sh 'mvn --version'
+                    sh 'mvn clean install'
                 }
             }
         }
-        stage('Test') {
+        stage('Docker Build') {
             steps {
                 container('docker') {
-                    sh 'docker --version'
+                    sh 'docker build -t my-app .'
                 }
             }
         }
     }
 }
+
 
 
 
