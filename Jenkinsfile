@@ -22,8 +22,8 @@ pipeline {
                 volumeMounts:
                 - name: docker-socket
                   mountPath: /var/run/docker.sock # Mount Docker socket from host.
-              - name: maven
-                image: maven:lts-jdk11 # Use a stable Maven image with JDK compatibility.
+              // - name: maven
+              //   image: maven:lts-jdk11 # Use a stable Maven image with JDK compatibility.
               volumes:
               - name: docker-socket
                 hostPath:
