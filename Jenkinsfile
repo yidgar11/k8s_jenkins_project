@@ -1,23 +1,23 @@
 pipeline {
     agent {
         kubernetes {
-            label 'jenkins-agent'
-            defaultContainer 'jnlp'
-            yaml """
-            apiVersion: v1
-            kind: Pod
-            metadata:
-              name: jenkins-agent
-              namespace: devops-tools
-            spec:
-              containers:
-              - name: jnlp
-                image: jenkins/inbound-agent
-              - name: docker
-                image: docker:latest
-              - name: maven
-                image: maven:latest
-            """
+            label 'kube-agent'
+            // defaultContainer 'docker'
+            // yaml """
+            // apiVersion: v1
+            // kind: Pod
+            // metadata:
+            //   name: jenkins-agent
+            //   namespace: devops-tools
+            // spec:
+            //   containers:
+            //   - name: jnlp
+            //     image: jenkins/inbound-agent
+            //   - name: docker
+            //     image: docker:latest
+            //   - name: maven
+            //     image: maven:latest
+            // """
         }
     }
     stages {
