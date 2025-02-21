@@ -1,6 +1,10 @@
 pipeline {
   //agent any
-  agent { docker-pod }
+  podTemplate {
+    node( docker-pod ) {
+        sh ' uptime '
+    }
+}
   // agent {
   //       docker {
   //           image 'docker:24.0.6-dind' // Use a Docker-in-Docker image
