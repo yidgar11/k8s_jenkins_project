@@ -16,7 +16,7 @@ pipeline {
   // }
 
   environment {
-     DOCKERHUB = credentials('dockerhub-credentials') 
+     DOCKERHUB = credentials('dockerhub-credentials1') 
       // The credentials() function automatically creates:
         //DOCKERHUB_USR - username
         // DOCKERHUB_PSW - password
