@@ -16,7 +16,11 @@ pipeline {
   // }
 
   environment {
-     DOCKERHUB_CREDENTIALS = credentials('dockerhub-credentials') 
+     DOCKERHUB = credentials('dockerhub-credentials') 
+      // The credentials() function automatically creates:
+        //DOCKERHUB_USR - username
+        // DOCKERHUB_PSW - password
+        // DOCKERHUB - username:password
      IMAGE_NAME = "yidgar11/rmqp-example" // Replace with your Docker Hub username and desired image name
      IMAGE_TAG = "${env.BUILD_NUMBER}"
   }
@@ -38,15 +42,15 @@ pipeline {
     stage('Login to Docker Hub') {
       steps {
         echo "Login to Docker Hub" 
-        echo "DOCKERHUB_USERNAME =  ${DOCKERHUB_USERNAME} "
-        echo "DOCKERHUB_PASSWORD =  ${DOCKERHUB_PASSWORD} "
+        echo "DOCKERHUB_USERNAME =  ${DOCKERHUB_USR} "
+        echo "DOCKERHUB_PASSWORD =  ${DOCKERHUB_PSW} "
         //sh "docker login -u ${DOCKERHUB_USERNAME} -p ${DOCKERHUB_PASSWORD}"
       }
     }
 
     stage('Push Docker Image') {
       steps {
-        echo "Pushjiong Docmer images" 
+        echo "Pushing Docmer images" 
         //sh "docker push ${IMAGE_NAME}:${IMAGE_TAG}"
       }
     }
