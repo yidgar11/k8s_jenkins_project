@@ -1,11 +1,12 @@
 pipeline {
   //agent any
-  agent {
-        docker {
-            image 'docker:24.0.6-dind' // Use a Docker-in-Docker image
-            args '--privileged'       // Required to enable Docker-in-Docker
-        }
-    }
+  agent docker-pod
+  // agent {
+  //       docker {
+  //           image 'docker:24.0.6-dind' // Use a Docker-in-Docker image
+  //           args '--privileged'       // Required to enable Docker-in-Docker
+  //       }
+  //   }
   // agent {
   //     kubernetes {
   //       label 'my-docker-agent'  // all your pods will be named with this prefix, followed by a unique id
